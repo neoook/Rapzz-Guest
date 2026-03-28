@@ -3,152 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💎 ELITE RARE FINDER v2</title>
+    <title>💎 BISHAL RARE SCANNER v4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; color: #f8fafc; }
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .rare-glow { border: 1px solid rgba(245, 158, 11, 0.3); box-shadow: 0 0 25px rgba(245, 158, 11, 0.1); background: linear-gradient(145deg, rgba(245, 158, 11, 0.05) 0%, rgba(2, 6, 23, 1) 100%); }
-        .badge-rare { background: linear-gradient(90deg, #f59e0b, #ef4444); color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
-        .pattern-tag { background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); color: #38bdf8; }
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+        body { font-family: 'Space Grotesk', sans-serif; background-color: #050505; color: #fff; }
+        .glass { background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+        .rare-card { 
+            border-left: 5px solid #f59e0b; 
+            background: linear-gradient(135deg, rgba(245,158,11,0.12) 0%, rgba(5,5,5,1) 50%);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(245,158,11,0.05);
+        }
+        .animate-glow { animation: glow 2s infinite alternate; }
+        @keyframes glow { from { box-shadow: 0 0 5px rgba(245,158,11,0.2); } to { box-shadow: 0 0 20px rgba(245,158,11,0.5); } }
     </style>
 </head>
-<body class="p-4 min-h-screen">
-    <div class="max-w-7xl mx-auto">
-        <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6 mt-6">
-            <div>
-                <h1 class="text-3xl md:text-5xl font-extrabold tracking-tighter italic">BISHAL<span class="text-amber-500">RARE</span>.</h1>
-                <p class="text-slate-500 text-sm">Automated Account Rarity Analyzer v2.0</p>
+<body class="p-6 md:p-12 min-h-screen">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
+            <div class="text-center md:text-left">
+                <h1 class="text-5xl font-black italic tracking-tighter">BISHAL<span class="text-amber-500 underline uppercase">Rare</span></h1>
+                <p class="text-slate-500 mt-2 font-medium tracking-widest text-xs uppercase">Engine v4.0 • Mirroring Python Logic</p>
             </div>
-            <div class="flex gap-4">
-                <label class="bg-white text-black hover:bg-slate-200 px-6 py-3 rounded-full cursor-pointer font-bold transition flex items-center shadow-lg shadow-white/5">
-                    <i class="fas fa-plus-circle mr-2 text-lg"></i> LOAD JSON
-                    <input type="file" id="jsonInput" class="hidden" accept=".json">
-                </label>
+            <label class="bg-white hover:bg-slate-200 text-black px-10 py-4 rounded-full font-black cursor-pointer transition-all active:scale-95 shadow-xl">
+                <i class="fas fa-bolt mr-2"></i> LOAD RAW JSON
+                <input type="file" id="jsonInput" class="hidden" accept=".json">
+            </label>
+        </div>
+
+        <div id="statsBar" class="hidden grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
+            <div class="glass p-6 rounded-3xl text-center">
+                <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Total Scanned</p>
+                <h3 id="totalCount" class="text-3xl font-black italic text-white">0</h3>
+            </div>
+            <div class="glass p-6 rounded-3xl border-amber-500/30 text-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-amber-500/5 animate-pulse"></div>
+                <p class="text-amber-500 text-[10px] font-bold uppercase tracking-widest mb-1">Rare Found</p>
+                <h3 id="rareCount" class="text-3xl font-black italic text-amber-500">0</h3>
+            </div>
+            <div class="glass p-6 rounded-3xl text-center hidden md:block">
+                <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">System Health</p>
+                <h3 class="text-3xl font-black italic text-emerald-500">100%</h3>
             </div>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div class="glass p-4 rounded-3xl text-center">
-                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest">Total Scanned</p>
-                <h2 id="totalCount" class="text-2xl font-black">0</h2>
-            </div>
-            <div class="glass p-4 rounded-3xl text-center border-amber-500/20">
-                <p class="text-xs text-amber-500 uppercase font-bold tracking-widest">Rare Detected</p>
-                <h2 id="rareCount" class="text-2xl font-black text-amber-500">0</h2>
-            </div>
-            <div class="glass p-4 rounded-3xl text-center">
-                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest">Region</p>
-                <h2 class="text-2xl font-black text-emerald-400">ID</h2>
-            </div>
-            <div class="glass p-4 rounded-3xl text-center">
-                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest">Status</p>
-                <h2 class="text-2xl font-black text-blue-400">READY</h2>
-            </div>
-        </div>
+        <div id="accountGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
 
-        <div id="accountGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            </div>
-
-        <div id="emptyState" class="text-center py-32">
-            <div class="inline-block p-8 rounded-full bg-slate-900/50 mb-4">
-                <i class="fas fa-microchip text-5xl text-slate-700 animate-pulse"></i>
-            </div>
-            <p class="text-slate-400 font-medium">Waiting for data input, bjirr...</p>
+        <div id="placeholder" class="text-center py-48 opacity-10">
+            <i class="fas fa-satellite-dish text-9xl mb-6"></i>
+            <h2 class="text-xl font-bold uppercase tracking-[1.5em]">Waiting for Feed</h2>
         </div>
     </div>
 
     <script>
-        let rawData = [];
+        // Mirroring ACCOUNT_RARITY_PATTERNS from your Python function
+        const ACCOUNT_RARITY_PATTERNS = {
+            "REPEATED_DIGITS_4": [/(\d)\1{3,}/, 3],
+            "REPEATED_DIGITS_3": [/(\d)\1\1(\d)\2\2/, 2],
+            "SEQUENTIAL_5": [/(12345|23456|34567|45678|56789)/, 4],
+            "SEQUENTIAL_4": [/(0123|1234|2345|3456|4567|5678|6789|9876|8765|7654|6543|5432|4321|3210)/, 3],
+            "PALINDROME_6": [/^(\d)(\d)(\d)\3\2\1$/, 5],
+            "PALINDROME_4": [/^(\d)(\d)\2\1$/, 3],
+            "SPECIAL_COMBINATIONS_HIGH": [/(69|420|1337|007)/, 4],
+            "SPECIAL_COMBINATIONS_MED": [/(100|200|300|400|500|666|777|888|999)/, 2],
+            "QUADRUPLE_DIGITS": [/(1111|2222|3333|4444|5555|6666|7777|8888|9999|0000)/, 4],
+            "GOLDEN_RATIO": [/1618|0618/, 3]
+        };
+
+        const RARITY_SCORE_THRESHOLD = 3;
 
         document.getElementById('jsonInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
-            if (!file) return;
-
             const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    rawData = JSON.parse(e.target.result);
-                    const rareItems = rawData.filter(acc => acc.rarity_type === "RARE_ACCOUNT");
-                    
-                    document.getElementById('totalCount').innerText = rawData.length;
-                    document.getElementById('rareCount').innerText = rareItems.length;
-                    
-                    renderData(rawData);
-                    document.getElementById('emptyState').classList.add('hidden');
-                } catch (err) {
-                    alert('Format JSON kaco nih, cek lagi!');
-                }
+            reader.onload = (e) => {
+                const data = JSON.parse(e.target.result);
+                processData(data);
             };
             reader.readAsText(file);
         });
 
-        function renderData(data) {
-            const grid = document.getElementById('accountGrid');
-            grid.innerHTML = '';
+        function checkAccountRarity(accId) {
+            if (!accId || accId === "N/A") return { isRare: false };
 
-            data.forEach((acc) => {
-                const isRare = acc.rarity_type === "RARE_ACCOUNT";
-                const card = document.createElement('div');
-                
-                // Set Card Style based on Rarity
-                card.className = `glass rounded-[2rem] p-6 relative overflow-hidden transition-all duration-300 hover:-translate-y-2 ${isRare ? 'rare-glow border-amber-500/40' : 'opacity-60 hover:opacity-100'}`;
-                
-                // Get Reason details
-                let reasonClean = acc.reason || "Normal Account";
-                let score = acc.rarity_score || 0;
-                
-                card.innerHTML = `
-                    ${isRare ? `<div class="absolute -right-12 -top-12 w-32 h-32 bg-amber-500/10 blur-3xl rounded-full"></div>` : ''}
-                    
-                    <div class="flex justify-between items-center mb-6">
-                        <span class="text-[10px] font-black px-3 py-1 rounded-full bg-slate-800 text-slate-400 uppercase tracking-widest">ID: ${acc.uid}</span>
-                        ${isRare ? `<span class="badge-rare text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">SCORE: ${score}</span>` : ''}
-                    </div>
+            let rarityScore = 0;
+            let detectedPatterns = [];
 
-                    <div class="mb-6">
-                        <h3 class="text-2xl font-extrabold text-white mb-1 tracking-tight">${acc.name}</h3>
-                        <div class="flex items-center gap-2">
-                             <p class="text-amber-400 font-mono text-lg font-bold">${acc.account_id}</p>
-                             <button onclick="copyToClipboard('${acc.account_id}')" class="text-slate-600 hover:text-white transition"><i class="fas fa-copy text-xs"></i></button>
-                        </div>
-                    </div>
+            // 1. Regex Patterns
+            for (let [type, data] of Object.entries(ACCOUNT_RARITY_PATTERNS)) {
+                if (data[0].test(accId)) {
+                    rarityScore += data[1];
+                    detectedPatterns.push(type);
+                }
+            }
 
-                    <div class="space-y-4">
-                        ${isRare ? `
-                            <div class="p-4 rounded-2xl bg-black/40 border border-white/5">
-                                <p class="text-[10px] text-slate-500 font-bold uppercase mb-2">Detection Intel:</p>
-                                <p class="text-xs text-slate-300 leading-relaxed mb-3">${reasonClean}</p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="pattern-tag text-[9px] px-2 py-1 rounded-md font-bold uppercase">PREMIUM_ID</span>
-                                    <span class="pattern-tag text-[9px] px-2 py-1 rounded-md font-bold uppercase text-emerald-400 border-emerald-500/20 bg-emerald-500/5">VERIFIED</span>
-                                </div>
-                            </div>
-                        ` : `
-                            <p class="text-xs text-slate-600 italic">No special patterns detected in this account.</p>
-                        `}
+            // 2. Uniform Digits Logic
+            const digits = accId.split('').filter(d => !isNaN(d)).map(Number);
+            const uniqueDigits = new Set(digits);
+            if (uniqueDigits.size === 1 && digits.length >= 4) {
+                rarityScore += 5;
+                detectedPatterns.push("UNIFORM_DIGITS");
+            }
 
-                        <div class="flex gap-2">
-                            <button onclick="copyToClipboard('${acc.password}')" class="flex-1 bg-white text-black hover:bg-slate-200 py-3 rounded-2xl text-xs font-black transition uppercase tracking-widest">
-                                Copy Password
-                            </button>
-                            <div class="w-12 h-12 glass rounded-2xl flex items-center justify-center text-emerald-500">
-                                <i class="fas fa-globe-asia"></i>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
+            // 3. Arithmetic Sequence Logic
+            if (digits.length >= 4) {
+                let diffs = [];
+                for (let i = 0; i < digits.length - 1; i++) {
+                    diffs.push(digits[i+1] - digits[i]);
+                }
+                if (new Set(diffs).size === 1) {
+                    rarityScore += 4;
+                    detectedPatterns.push("ARITHMETIC_SEQUENCE");
+                }
+            }
+
+            // 4. Low ID Logic
+            if (accId.length <= 8 && !isNaN(accId) && parseInt(accId) < 1000000) {
+                rarityScore += 3;
+                detectedPatterns.push("LOW_ACCOUNT_ID");
+            }
+
+            if (rarityScore >= RARITY_SCORE_THRESHOLD) {
+                return {
+                    isRare: true,
+                    score: rarityScore,
+                    reason: `Account ID ${accId} - Score: ${rarityScore} - Patterns: ${detectedPatterns.join(', ')}`
+                };
+            }
+            return { isRare: false };
         }
 
-        function copyToClipboard(text) {
+        function processData(data) {
+            const grid = document.getElementById('accountGrid');
+            const placeholder = document.getElementById('placeholder');
+            const statsBar = document.getElementById('statsBar');
+            
+            grid.innerHTML = '';
+            let rareCounter = 0;
+
+            data.forEach(acc => {
+                const result = checkAccountRarity(acc.account_id);
+                if (result.isRare) {
+                    rareCounter++;
+                    const card = document.createElement('div');
+                    card.className = "glass p-8 rounded-[2.5rem] rare-card relative animate-glow transition-transform hover:scale-[1.02]";
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="flex flex-col gap-1">
+                                <span class="bg-amber-500 text-black text-[9px] font-black px-2 py-1 rounded shadow-lg shadow-amber-500/20 uppercase w-max">RARE_ACCOUNT</span>
+                                <span class="text-slate-500 text-[10px] font-bold uppercase tracking-tighter">UID: ${acc.uid}</span>
+                            </div>
+                            <div class="bg-white/5 border border-white/10 rounded-2xl px-4 py-2 text-center">
+                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Score</p>
+                                <p class="text-xl font-black text-amber-500 leading-none">${result.score}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h3 class="text-3xl font-black text-white leading-none mb-2 tracking-tighter">${acc.name}</h3>
+                            <p class="text-amber-400 font-mono text-xl tracking-widest font-bold">${acc.account_id}</p>
+                        </div>
+
+                        <div class="bg-black/60 rounded-2xl p-5 mb-8 border border-white/5 italic">
+                            <p class="text-[10px] text-amber-500/50 font-bold uppercase mb-2">Bot Intelligence Report:</p>
+                            <p class="text-xs text-slate-300 font-medium leading-relaxed font-mono">${result.reason}</p>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button onclick="copyClip('${acc.password}')" class="flex-1 bg-white hover:bg-emerald-400 hover:text-white text-black py-4 rounded-2xl font-black text-xs uppercase transition-all active:scale-95 shadow-lg shadow-white/5 flex items-center justify-center gap-2">
+                                <i class="fas fa-key"></i> Copy Password
+                            </button>
+                            <div class="w-14 h-14 glass rounded-2xl flex items-center justify-center text-slate-500 border border-white/5">
+                                <span class="text-[10px] font-black">${acc.region}</span>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                }
+            });
+
+            document.getElementById('totalCount').innerText = data.length;
+            document.getElementById('rareCount').innerText = rareCounter;
+            placeholder.classList.add('hidden');
+            statsBar.classList.remove('hidden');
+        }
+
+        function copyClip(text) {
             navigator.clipboard.writeText(text);
-            // Simple alert replacement with a tiny toast if you want, for now use alert
-            console.log('Copied:', text);
-            // alert('Berhasil disalin: ' + text);
+            alert('Password Copied! Gasken Login!');
         }
     </script>
 </body>
