@@ -3,61 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💎 BISHAL RARE SCANNER v4</title>
+    <title>💎 BISHAL ELITE 5+ SCANNER</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
-        body { font-family: 'Space Grotesk', sans-serif; background-color: #050505; color: #fff; }
+        body { font-family: 'Space Grotesk', sans-serif; background-color: #050505; color: #fff; scroll-behavior: smooth; }
         .glass { background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
-        .rare-card { 
-            border-left: 5px solid #f59e0b; 
-            background: linear-gradient(135deg, rgba(245,158,11,0.12) 0%, rgba(5,5,5,1) 50%);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(245,158,11,0.05);
+        .elite-card { 
+            border-top: 2px solid #f59e0b;
+            background: linear-gradient(180deg, rgba(245,158,11,0.1) 0%, rgba(5,5,5,1) 100%);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
         }
-        .animate-glow { animation: glow 2s infinite alternate; }
-        @keyframes glow { from { box-shadow: 0 0 5px rgba(245,158,11,0.2); } to { box-shadow: 0 0 20px rgba(245,158,11,0.5); } }
+        .glow-text { text-shadow: 0 0 10px rgba(245, 158, 11, 0.5); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #f59e0b; border-radius: 10px; }
     </style>
 </head>
 <body class="p-6 md:p-12 min-h-screen">
     <div class="max-w-6xl mx-auto">
         <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
             <div class="text-center md:text-left">
-                <h1 class="text-5xl font-black italic tracking-tighter">BISHAL<span class="text-amber-500 underline uppercase">Rare</span></h1>
-                <p class="text-slate-500 mt-2 font-medium tracking-widest text-xs uppercase">Engine v4.0 • Mirroring Python Logic</p>
+                <h1 class="text-5xl font-black italic tracking-tighter text-amber-500 glow-text">ELITE<span class="text-white underline uppercase italic">Scanner</span></h1>
+                <p class="text-slate-500 mt-2 font-medium tracking-[0.3em] text-[10px] uppercase">Filtering Scores 5-12+ Only</p>
             </div>
-            <label class="bg-white hover:bg-slate-200 text-black px-10 py-4 rounded-full font-black cursor-pointer transition-all active:scale-95 shadow-xl">
-                <i class="fas fa-bolt mr-2"></i> LOAD RAW JSON
-                <input type="file" id="jsonInput" class="hidden" accept=".json">
-            </label>
-        </div>
-
-        <div id="statsBar" class="hidden grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
-            <div class="glass p-6 rounded-3xl text-center">
-                <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Total Scanned</p>
-                <h3 id="totalCount" class="text-3xl font-black italic text-white">0</h3>
-            </div>
-            <div class="glass p-6 rounded-3xl border-amber-500/30 text-center relative overflow-hidden">
-                <div class="absolute inset-0 bg-amber-500/5 animate-pulse"></div>
-                <p class="text-amber-500 text-[10px] font-bold uppercase tracking-widest mb-1">Rare Found</p>
-                <h3 id="rareCount" class="text-3xl font-black italic text-amber-500">0</h3>
-            </div>
-            <div class="glass p-6 rounded-3xl text-center hidden md:block">
-                <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">System Health</p>
-                <h3 class="text-3xl font-black italic text-emerald-500">100%</h3>
+            
+            <div class="flex flex-wrap justify-center gap-3">
+                <button onclick="copySortedIds()" class="bg-amber-500 hover:bg-amber-400 text-black px-6 py-4 rounded-2xl font-black text-xs uppercase transition-all shadow-lg shadow-amber-500/20">
+                    <i class="fas fa-list-ol mr-2"></i> Copy ID List (High to Low)
+                </button>
+                <label class="bg-white hover:bg-slate-200 text-black px-6 py-4 rounded-2xl font-black text-xs uppercase cursor-pointer transition-all shadow-xl">
+                    <i class="fas fa-file-upload mr-2"></i> Load JSON
+                    <input type="file" id="jsonInput" class="hidden" accept=".json">
+                </label>
             </div>
         </div>
 
-        <div id="accountGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+        <div id="statsBar" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+            <div class="glass p-5 rounded-3xl text-center">
+                <p class="text-slate-500 text-[9px] font-bold uppercase tracking-widest mb-1">Total Scanned</p>
+                <h3 id="totalCount" class="text-2xl font-black italic text-white">0</h3>
+            </div>
+            <div class="glass p-5 rounded-3xl border-amber-500/30 text-center">
+                <p class="text-amber-500 text-[9px] font-bold uppercase tracking-widest mb-1">Elite (5+) Found</p>
+                <h3 id="rareCount" class="text-2xl font-black italic text-amber-500">0</h3>
+            </div>
+            <div class="glass p-5 rounded-3xl text-center">
+                <p class="text-slate-500 text-[9px] font-bold uppercase tracking-widest mb-1">Max Score</p>
+                <h3 id="maxScore" class="text-2xl font-black italic text-emerald-400">0</h3>
+            </div>
+            <div class="glass p-5 rounded-3xl text-center">
+                <p class="text-slate-500 text-[9px] font-bold uppercase tracking-widest mb-1">Scanner</p>
+                <h3 class="text-2xl font-black italic text-blue-400">ACTIVE</h3>
+            </div>
+        </div>
+
+        <textarea id="tempIdBox" class="hidden"></textarea>
+
+        <div id="accountGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
         <div id="placeholder" class="text-center py-48 opacity-10">
-            <i class="fas fa-satellite-dish text-9xl mb-6"></i>
-            <h2 class="text-xl font-bold uppercase tracking-[1.5em]">Waiting for Feed</h2>
+            <i class="fas fa-gem text-9xl mb-6"></i>
+            <h2 class="text-xl font-bold uppercase tracking-[1.5em]">Elite Only</h2>
         </div>
     </div>
 
     <script>
-        // Mirroring ACCOUNT_RARITY_PATTERNS from your Python function
+        let eliteData = [];
+
         const ACCOUNT_RARITY_PATTERNS = {
             "REPEATED_DIGITS_4": [/(\d)\1{3,}/, 3],
             "REPEATED_DIGITS_3": [/(\d)\1\1(\d)\2\2/, 2],
@@ -71,25 +85,21 @@
             "GOLDEN_RATIO": [/1618|0618/, 3]
         };
 
-        const RARITY_SCORE_THRESHOLD = 3;
-
         document.getElementById('jsonInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             const reader = new FileReader();
             reader.onload = (e) => {
                 const data = JSON.parse(e.target.result);
-                processData(data);
+                processEliteData(data);
             };
             reader.readAsText(file);
         });
 
         function checkAccountRarity(accId) {
             if (!accId || accId === "N/A") return { isRare: false };
-
             let rarityScore = 0;
             let detectedPatterns = [];
 
-            // 1. Regex Patterns
             for (let [type, data] of Object.entries(ACCOUNT_RARITY_PATTERNS)) {
                 if (data[0].test(accId)) {
                     rarityScore += data[1];
@@ -97,7 +107,6 @@
                 }
             }
 
-            // 2. Uniform Digits Logic
             const digits = accId.split('').filter(d => !isNaN(d)).map(Number);
             const uniqueDigits = new Set(digits);
             if (uniqueDigits.size === 1 && digits.length >= 4) {
@@ -105,7 +114,6 @@
                 detectedPatterns.push("UNIFORM_DIGITS");
             }
 
-            // 3. Arithmetic Sequence Logic
             if (digits.length >= 4) {
                 let diffs = [];
                 for (let i = 0; i < digits.length - 1; i++) {
@@ -117,80 +125,90 @@
                 }
             }
 
-            // 4. Low ID Logic
             if (accId.length <= 8 && !isNaN(accId) && parseInt(accId) < 1000000) {
                 rarityScore += 3;
                 detectedPatterns.push("LOW_ACCOUNT_ID");
             }
 
-            if (rarityScore >= RARITY_SCORE_THRESHOLD) {
+            // FILTER KHUSUS SCORE 5+ (Sesuai Request)
+            if (rarityScore >= 5) {
                 return {
-                    isRare: true,
+                    isElite: true,
                     score: rarityScore,
-                    reason: `Account ID ${accId} - Score: ${rarityScore} - Patterns: ${detectedPatterns.join(', ')}`
+                    reason: `ID ${accId} - Score: ${rarityScore} - [${detectedPatterns.join(', ')}]`
                 };
             }
-            return { isRare: false };
+            return { isElite: false };
         }
 
-        function processData(data) {
+        function processEliteData(data) {
             const grid = document.getElementById('accountGrid');
-            const placeholder = document.getElementById('placeholder');
             const statsBar = document.getElementById('statsBar');
+            document.getElementById('placeholder').classList.add('hidden');
+            statsBar.classList.remove('hidden');
             
             grid.innerHTML = '';
-            let rareCounter = 0;
+            eliteData = [];
+            let maxS = 0;
 
             data.forEach(acc => {
-                const result = checkAccountRarity(acc.account_id);
-                if (result.isRare) {
-                    rareCounter++;
-                    const card = document.createElement('div');
-                    card.className = "glass p-8 rounded-[2.5rem] rare-card relative animate-glow transition-transform hover:scale-[1.02]";
-                    card.innerHTML = `
-                        <div class="flex justify-between items-start mb-6">
-                            <div class="flex flex-col gap-1">
-                                <span class="bg-amber-500 text-black text-[9px] font-black px-2 py-1 rounded shadow-lg shadow-amber-500/20 uppercase w-max">RARE_ACCOUNT</span>
-                                <span class="text-slate-500 text-[10px] font-bold uppercase tracking-tighter">UID: ${acc.uid}</span>
-                            </div>
-                            <div class="bg-white/5 border border-white/10 rounded-2xl px-4 py-2 text-center">
-                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Score</p>
-                                <p class="text-xl font-black text-amber-500 leading-none">${result.score}</p>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-6">
-                            <h3 class="text-3xl font-black text-white leading-none mb-2 tracking-tighter">${acc.name}</h3>
-                            <p class="text-amber-400 font-mono text-xl tracking-widest font-bold">${acc.account_id}</p>
-                        </div>
-
-                        <div class="bg-black/60 rounded-2xl p-5 mb-8 border border-white/5 italic">
-                            <p class="text-[10px] text-amber-500/50 font-bold uppercase mb-2">Bot Intelligence Report:</p>
-                            <p class="text-xs text-slate-300 font-medium leading-relaxed font-mono">${result.reason}</p>
-                        </div>
-
-                        <div class="flex gap-3">
-                            <button onclick="copyClip('${acc.password}')" class="flex-1 bg-white hover:bg-emerald-400 hover:text-white text-black py-4 rounded-2xl font-black text-xs uppercase transition-all active:scale-95 shadow-lg shadow-white/5 flex items-center justify-center gap-2">
-                                <i class="fas fa-key"></i> Copy Password
-                            </button>
-                            <div class="w-14 h-14 glass rounded-2xl flex items-center justify-center text-slate-500 border border-white/5">
-                                <span class="text-[10px] font-black">${acc.region}</span>
-                            </div>
-                        </div>
-                    `;
-                    grid.appendChild(card);
+                const res = checkAccountRarity(acc.account_id);
+                if (res.isElite) {
+                    const eliteAcc = { ...acc, elite_score: res.score, elite_reason: res.reason };
+                    eliteData.push(eliteAcc);
+                    if (res.score > maxS) maxS = res.score;
                 }
             });
 
+            // SORTING DARI SCORE TINGGI KE RENDAH
+            eliteData.sort((a, b) => b.elite_score - a.elite_score);
+
+            eliteData.forEach(acc => {
+                const card = document.createElement('div');
+                card.className = "glass p-6 rounded-[2rem] elite-card relative transition-all hover:scale-[1.03]";
+                card.innerHTML = `
+                    <div class="flex justify-between mb-4">
+                        <span class="text-[9px] font-black text-amber-500 uppercase tracking-widest">Elite Member</span>
+                        <span class="bg-amber-500 text-black text-[10px] font-black px-2 py-0.5 rounded italic">SCORE ${acc.elite_score}</span>
+                    </div>
+                    <h3 class="text-xl font-black text-white mb-1 tracking-tight truncate">${acc.name}</h3>
+                    <p class="text-amber-400 font-mono text-lg font-bold mb-4">${acc.account_id}</p>
+                    <div class="bg-black/50 p-3 rounded-xl border border-white/5 mb-4">
+                        <p class="text-[10px] text-slate-400 font-mono leading-tight">${acc.elite_reason}</p>
+                    </div>
+                    <button onclick="copyClip('${acc.password}')" class="w-full bg-white text-black py-3 rounded-xl font-black text-[10px] uppercase hover:bg-amber-500 transition-colors">
+                        Copy Password
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+
             document.getElementById('totalCount').innerText = data.length;
-            document.getElementById('rareCount').innerText = rareCounter;
-            placeholder.classList.add('hidden');
-            statsBar.classList.remove('hidden');
+            document.getElementById('rareCount').innerText = eliteData.length;
+            document.getElementById('maxScore').innerText = maxS;
+        }
+
+        function copySortedIds() {
+            if (eliteData.length === 0) return alert('Upload JSON dulu bjirr!');
+            
+            // Format ID saja, High to Low (Sudah di-sort di fungsi process)
+            const idList = eliteData.map(acc => acc.account_id).join('\n');
+            navigator.clipboard.writeText(idList);
+            
+            // Alert visual
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "<i class='fas fa-check mr-2'></i> ID List Copied!";
+            btn.classList.replace('bg-amber-500', 'bg-emerald-500');
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.replace('bg-emerald-500', 'bg-amber-500');
+            }, 2000);
         }
 
         function copyClip(text) {
             navigator.clipboard.writeText(text);
-            alert('Password Copied! Gasken Login!');
         }
     </script>
 </body>
