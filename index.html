@@ -3,54 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BISHAL  ERA DASHBOARD</title>
+    <title>💎 BISHAL RARE FINDER</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background: radial-gradient(circle, #1a1a1a 0%, #000 100%); color: #00ff00; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(0,255,0,0.2); }
-        .glow { text-shadow: 0 0 10px #00ff00; }
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+        body { font-family: 'Space Grotesk', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .rare-card { transition: all 0.3s ease; }
+        .rare-card:hover { transform: translateY(-5px); border-color: #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); }
     </style>
 </head>
-<body class="min-h-screen p-8 font-mono">
-    <div class="max-w-4xl mx-auto">
-        <header class="text-center mb-12">
-            <h1 class="text-5xl font-bold glow mb-2">𝐁𝐑𝐄𝐗𝐗𝐄𝐑𝐀</h1>
-            <p class="text-gray-400 italic">"Premium Account Generator Dashboard"</p>
-            <div class="mt-4 text-xs text-green-500 opacity-50">Last Update: Fri Mar 27 23:59:25 UTC 2026</div>
-        </header>
+<body class="p-4 md:p-8">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent mb-2">RARE FINDER</h1>
+            <p class="text-slate-400">Saring akun ayang lu yang punya ID spek dewa 🚀</p>
+        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="glass p-6 rounded-2xl shadow-2xl">
-                <h2 class="text-xl font-bold mb-4 border-b border-green-900 pb-2">📊 Statistics</h2>
-                <p class="mb-2">Status: <span class="text-white bg-green-900 px-2 rounded">ONLINE</span></p>
-                <p class="mb-2">System: <span class="text-white">GitHub Actions v3</span></p>
-                <p>Region Support: <span class="text-white">IND, ME, VN, BR, CIS, BD</span></p>
+        <div class="glass rounded-3xl p-6 mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="flex gap-4 items-center">
+                <label class="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-2xl cursor-pointer font-bold transition">
+                    <i class="fas fa-file-import mr-2"></i> Import JSON
+                    <input type="file" id="jsonInput" class="hidden" accept=".json">
+                </label>
+                <div id="stats" class="text-sm font-medium">Total: <span id="totalCount" class="text-blue-400">0</span></div>
             </div>
-
-            <div class="glass p-6 rounded-2xl shadow-2xl">
-                <h2 class="text-xl font-bold mb-4 border-b border-green-900 pb-2">📁 Quick Access</h2>
-                <div class="flex flex-col space-y-3">
-                    <a href="./𝐁𝐑𝐄𝐗𝐗𝐄𝐑𝐀/𝐀𝐂𝐂𝐎𝐔𝐍𝐓𝐒/" class="hover:text-white transition">📂 Browse All Accounts</a>
-                    <a href="./𝐁𝐑𝐄𝐗𝐗𝐄𝐑𝐀/𝐑𝐀𝐑𝐄𝐀𝐂𝐂𝐎𝐔𝐍𝐓𝐒/" class="hover:text-white transition">💎 Rare Accounts Folder</a>
-                    <a href="./𝐁𝐑𝐄𝐗𝐗𝐄𝐑𝐀/𝐆𝐇𝐎𝐒𝐓/" class="hover:text-white transition">👻 Ghost Mode Files</a>
-                </div>
+            
+            <div class="flex gap-2">
+                <button onclick="filterData('all')" class="bg-slate-700 px-4 py-2 rounded-xl text-sm hover:bg-slate-600 active:scale-95 transition">Semua</button>
+                <button onclick="filterData('rare')" class="bg-amber-600/20 text-amber-400 border border-amber-500/50 px-4 py-2 rounded-xl text-sm hover:bg-amber-600/30 transition">Hanya Rare 💎</button>
             </div>
         </div>
 
-        <div class="mt-12 glass p-8 rounded-2xl overflow-hidden">
-            <h2 class="text-2xl font-bold mb-4 text-center">💻 Generated Assets</h2>
-            <p class="text-sm text-center text-gray-500 mb-6 italic">Semua file disimpan dalam format .json untuk keamanan data.</p>
-            <div class="bg-black/50 p-4 rounded-lg border border-green-900/50">
-                <code class="text-xs text-green-400">
-                   // Info: Akses file langsung via URL repo lo <br>
-                   // Contoh: /𝐁𝐑𝐄𝐗𝐗𝐄𝐑𝐀/𝐀.../accounts-IND.json
-                </code>
+        <div id="accountGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             </div>
-        </div>
 
-        <footer class="mt-20 text-center text-gray-600 text-[10px]">
-            &copy; 2026 BISHAL PREDICTOR | BY SPIDEERIO | NOT FOR SALE
-        </footer>
+        <div id="emptyState" class="text-center py-20">
+            <i class="fas fa-box-open text-6xl text-slate-700 mb-4"></i>
+            <p class="text-slate-500">Belum ada data. Upload file JSON hasil generate lu, bjirr!</p>
+        </div>
     </div>
+
+    <script>
+        let rawData = [];
+
+        document.getElementById('jsonInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    rawData = JSON.parse(e.target.result);
+                    document.getElementById('totalCount').innerText = rawData.length;
+                    renderData(rawData);
+                    document.getElementById('emptyState').classList.add('hidden');
+                } catch (err) {
+                    alert('File JSON rusak atau gak valid, bray!');
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        function checkRarity(id) {
+            if (!id || id === "N/A") return { isRare: false, reason: "" };
+            
+            const patterns = [
+                { reg: /(\d)\1{3,}/, label: "Triple/Quad Digits" }, // Angka kembar 4+
+                { reg: /(1234|2345|3456|4567|5678|6789)/, label: "Sequential ID" }, // Urutan
+                { reg: /^(\d{3,})\1$/, label: "Mirror Pattern" } // Mirror
+            ];
+
+            for (let p of patterns) {
+                if (p.reg.test(id)) return { isRare: true, reason: p.label };
+            }
+            return { isRare: false, reason: "" };
+        }
+
+        function renderData(data) {
+            const grid = document.getElementById('accountGrid');
+            grid.innerHTML = '';
+
+            data.forEach((acc, index) => {
+                const rarity = checkRarity(acc.account_id);
+                const card = document.createElement('div');
+                card.className = `glass rounded-3xl p-6 rare-card ${rarity.isRare ? 'border-amber-500/50 bg-amber-500/5' : ''}`;
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="px-3 py-1 rounded-lg bg-slate-800 text-xs font-bold text-slate-400">#${acc.thread_id || index + 1}</span>
+                        ${rarity.isRare ? `<span class="bg-amber-500 text-black text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-tighter animate-pulse">${rarity.reason}</span>` : ''}
+                    </div>
+                    <h3 class="text-xl font-bold mb-1 text-white">${acc.name}</h3>
+                    <p class="text-blue-400 font-mono text-sm mb-4 tracking-widest">${acc.account_id}</p>
+                    
+                    <div class="space-y-2 mb-6">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-500">UID:</span>
+                            <span class="text-slate-300 font-mono">${acc.uid}</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-500">Region:</span>
+                            <span class="text-emerald-400 font-bold">${acc.region}</span>
+                        </div>
+                    </div>
+
+                    <button onclick="copyToClipboard('${acc.password}')" class="w-full bg-slate-800 hover:bg-slate-700 py-3 rounded-2xl text-sm font-bold transition flex items-center justify-center gap-2">
+                        <i class="fas fa-copy"></i> Copy Password
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterData(type) {
+            if (type === 'rare') {
+                const filtered = rawData.filter(acc => checkRarity(acc.account_id).isRare);
+                renderData(filtered);
+            } else {
+                renderData(rawData);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text);
+            alert('Password berhasil di-copy, gasken!');
+        }
+    </script>
 </body>
 </html>
