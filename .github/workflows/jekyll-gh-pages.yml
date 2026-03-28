@@ -21,7 +21,7 @@ jobs:
           python-version: '3.9'
 
       - name: Install Dependencies
-        run: pip install requests pycryptodome urllib3 psutil
+        run: pip install pyTelegramBotAPI pycryptodome requests urllib3
 
       - name: Run Generator
         run: |
