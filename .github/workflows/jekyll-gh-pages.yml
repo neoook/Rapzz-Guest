@@ -21,16 +21,16 @@ jobs:
           python-version: '3.9'
 
       - name: Install Dependencies
-        run: pip install pyTelegramBotAPI pycryptodome requests urllib3
+        run: |
+          pip install pyTelegramBotAPI pycryptodome requests urllib3 psutil
 
       - name: Run Generator
+        env:
+          # INI ADALAH JAMBATAN ANTARA GITHUB SECRET KE PYTHON
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
-          # Timeout 5 jam (18000s) biar aman dari limit GitHub
+          # Timeout 5 jam (18000s) biar gak kena kill paksa GitHub secara kasar
           timeout 18000s python bot.py || echo "Selesai/Limit reached"
-
-      - name: Create Web Dashboard
-        run: |
-
 
       - name: Save and Push
         run: |
