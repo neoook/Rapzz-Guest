@@ -1,0 +1,21 @@
+cat <<EOF > server.js
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import handler from './api/index.js';
+
+const app = express();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Middleware buat baca static file (HTML/CSS/JS di folder public)
+app.use(express.static('public'));
+
+// Route API (Nembak logic yang udah kita bikin)
+app.get('/api', handler);
+
+// Jalankan di port 3000 atau bebas
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(\`🚀 NeoBox Berjalan di http://localhost:\${PORT}\`);
+});
+EOF
